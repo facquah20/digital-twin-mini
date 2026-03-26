@@ -1,0 +1,45 @@
+bin
+include .env
+include .env.local
+include .env.development
+include .env.test
+include .env.production
+node_modules
+dist
+build
+coverage
+*.log
+*.tsbuildinfo
+.DS_Store
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*.bak
+*.tmp
+*.cache
+*.pid
+*.seed
+*.pid.lock
+lib
+*.tgz
+*.zip
+*.tar.gz
+*.log
+*.sql
+pyvenv
+venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+lib64
+etc/*
+share
+include
+etc
+pyvenv.cfg
+__pycache__/
