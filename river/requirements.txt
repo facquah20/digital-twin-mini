@@ -1,3 +1,6 @@
 numpy>=1.24.0
 scipy>=1.10.0
 pyvista[all]>=0.42.0
+pyvistaqt>=0.11.0
+PyQt6>=6.4.0
+pyqtgraph>=0.13.0
