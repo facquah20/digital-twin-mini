@@ -3,6 +3,32 @@
 
 ---
 
+"""
+╔══════════════════════════════════════════════════════════════════════════════╗
+║         RIVER ECOSYSTEM DIGITAL TWIN — CONTAMINANT TRANSPORT MODEL          ║
+║         Multi-Threaded Architecture | PyQt6 + PyVista                       ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  THREAD ARCHITECTURE:                                                        ║
+║                                                                              ║
+║  ┌─────────────────┐   Lock-protected    ┌──────────────────────────────┐   ║
+║  │  PhysicsThread  │ ──── SharedState ──▶│  Qt Main Thread (UI + VTK)   │   ║
+║  │  (daemon)       │                     │  • PyVista 3D viewport        │   ║
+║  │  • PDE solver   │   Qt Signals        │  • PyQt6 control panels       │   ║
+║  │  • ~60 Hz       │ ──────────────────▶ │  • Live charts (pyqtgraph)    │   ║
+║  └─────────────────┘                     │  • Station alert table        │   ║
+║                                          └──────────────────────────────┘   ║
+║                                                                              ║
+║  PHYSICS:  ∂C/∂t + u·∇C = D·∇²C − λC + S(x,y,t)                           ║
+║  SOLVER:   Explicit upwind FD | CFL-stable | 200×40 grid                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+INSTALL:
+    pip install numpy scipy pyvista pyvistaqt PyQt6 pyqtgraph
+
+RUN:
+    python river_digital_twin.py
+"""
+
 ## Overview
 
 A full scientific computing application that creates a **live 3D digital twin** of a 2 km river

@@ -1,28 +1,4 @@
-"""
-╔══════════════════════════════════════════════════════════════════════════════╗
-║         RIVER ECOSYSTEM DIGITAL TWIN — CONTAMINANT TRANSPORT MODEL          ║
-║         Multi-Threaded Architecture | PyQt6 + PyVista                       ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║  THREAD ARCHITECTURE:                                                        ║
-║                                                                              ║
-║  ┌─────────────────┐   Lock-protected    ┌──────────────────────────────┐   ║
-║  │  PhysicsThread  │ ──── SharedState ──▶│  Qt Main Thread (UI + VTK)   │   ║
-║  │  (daemon)       │                     │  • PyVista 3D viewport        │   ║
-║  │  • PDE solver   │   Qt Signals        │  • PyQt6 control panels       │   ║
-║  │  • ~60 Hz       │ ──────────────────▶ │  • Live charts (pyqtgraph)    │   ║
-║  └─────────────────┘                     │  • Station alert table        │   ║
-║                                          └──────────────────────────────┘   ║
-║                                                                              ║
-║  PHYSICS:  ∂C/∂t + u·∇C = D·∇²C − λC + S(x,y,t)                           ║
-║  SOLVER:   Explicit upwind FD | CFL-stable | 200×40 grid                    ║
-╚══════════════════════════════════════════════════════════════════════════════╝
 
-INSTALL:
-    pip install numpy scipy pyvista pyvistaqt PyQt6 pyqtgraph
-
-RUN:
-    python river_digital_twin.py
-"""
 
 # ── Standard library ──────────────────────────────────────────────────────────
 import sys
@@ -66,6 +42,10 @@ except ImportError:
 
 import warnings
 warnings.filterwarnings('ignore')
+
+
+# Force Qt to use X11/xcb backend to fix the BadWindow error
+os.environ["QT_QPA_PLATFORM"] = "xcb"# Force Qt to use X11/xcb backend to fix the BadWindow error
 
 # ──────────────────────────────────────────────────────────────────────────────
 # DOMAIN CONSTANTS
@@ -198,8 +178,8 @@ class RiverGeometry:
     # ── Manning velocity field ────────────────────────────────────────────────
     def _velocity_field(self) -> Tuple[np.ndarray, np.ndarray]:
         H  = self.depth_map
-        S0 = 0.0005
-        n  = 0.035
+        S0 = 0.0005 #longitudinal slope of the river system
+        n  = 0.035 #Manning's roughness coefficient (typical for natural rivers)
         U  = gaussian_filter((H**(2/3) * np.sqrt(S0)) / n, sigma=2)
         xx = np.linspace(0, RIVER_LENGTH, NX)[:, None]
         yy = np.linspace(-RIVER_WIDTH/2, RIVER_WIDTH/2, NY)[None, :]
